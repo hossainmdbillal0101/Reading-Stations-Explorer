@@ -6,7 +6,7 @@ A campus reading catalogue rebuilt from a bachelor thesis for Comilla Victoria G
 
 ![Rendered desktop catalogue preview](docs/previews/catalogue-desktop.png)
 
-[Mobile preview](docs/previews/catalogue-mobile.png) · [Welcome screen](docs/previews/welcome-desktop.png)
+[Mobile preview](docs/previews/catalogue-mobile.png) Â· [Welcome screen](docs/previews/welcome-desktop.png)
 
 ## What you can explore
 
@@ -17,7 +17,7 @@ A campus reading catalogue rebuilt from a bachelor thesis for Comilla Victoria G
 - In administration, add/edit/remove materials and stations, process requests, and copy a catalogue report.
 - Use a responsive layout with desktop navigation and mobile navigation.
 
-The demo stores catalogue changes, favourites, and requests on the current device. It offers explicit reader and administrator roles for demonstration only. Firebase mode uses email/password authentication, private user profiles, and server-enforced administrator claims. Passwords and Firebase session tokens are not saved to local preferences.
+The public demo is reader-only. It stores favourites and requests on the current device; catalogue administration is unavailable. Firebase mode uses email/password authentication, private user profiles, and server-enforced administrator claims. Passwords and Firebase session tokens are not saved to local preferences.
 
 ## Run locally
 
@@ -30,7 +30,7 @@ flutter run -d chrome
 flutter run -d DEVICE_ID
 ```
 
-Choose **Explore as a reader** or **Explore administration**. No credentials are needed in demo mode. Profile → Reset demo data restores the sample catalogue.
+Choose **Explore as a reader**. No credentials are needed in demo mode. Profile â†’ Reset demo data restores the sample catalogue.
 
 ```sh
 flutter analyze

@@ -16,7 +16,7 @@ class ExplorerApp extends StatelessWidget {
       animation: store,
       builder: (context, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Reading Stations Explorer',
+          title: 'CVGC Reading Stations Explorer',
           theme: ThemeData(
               useMaterial3: true,
               colorSchemeSeed: ink,
@@ -74,7 +74,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Icon(Icons.auto_stories_rounded, size: 48, color: gold),
               const SizedBox(height: 30),
-              const Text('READING STATIONS EXPLORER',
+              const Text('CVGC READING STATIONS EXPLORER',
                   style: TextStyle(
                       letterSpacing: 2,
                       fontSize: 12,
@@ -117,7 +117,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       const SizedBox(height: 12),
                       Text(s.live
                           ? 'Sign in to access your campus reading stations.'
-                          : 'A working demo with fictional data. Changes are saved on this device. Demo roles are for exploring the interface.'),
+                          : 'A reader-only demo with fictional data. Favourites and requests are saved only on this device.'),
                       const SizedBox(height: 26),
                       if (s.live) ...[
                         if (register) field(name, 'Your name'),
@@ -154,14 +154,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             label: const Padding(
                                 padding: EdgeInsets.all(12),
                                 child: Text('Explore as a reader'))),
-                        const SizedBox(height: 12),
-                        OutlinedButton.icon(
-                            onPressed: () => s.enterDemo(asAdmin: true),
-                            icon:
-                                const Icon(Icons.admin_panel_settings_outlined),
-                            label: const Padding(
-                                padding: EdgeInsets.all(12),
-                                child: Text('Explore administration'))),
                         const SizedBox(height: 18),
                         const Text(
                             'No registration. No real student records.\nDemo changes are not shared with other visitors.',
@@ -268,7 +260,7 @@ class _ExplorerHomeState extends State<ExplorerHome> {
     final labels = destinations;
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Reading Stations',
+          title: const Text('CVGC Reading Stations',
               style: TextStyle(fontWeight: FontWeight.bold)),
           actions: [
             if (s.live)
@@ -854,15 +846,6 @@ class _ExplorerHomeState extends State<ExplorerHome> {
                           onPressed: () => nameDialog(),
                           child: const Text('Edit display name')),
                       if (!s.live) ...[
-                        const SizedBox(height: 16),
-                        TextButton(
-                            onPressed: () {
-                              s.enterDemo(asAdmin: !s.admin);
-                              setState(() => page = 0);
-                            },
-                            child: Text(s.admin
-                                ? 'Switch to demo reader'
-                                : 'Switch to demo administrator')),
                         TextButton(
                             onPressed: s.busy
                                 ? null

@@ -1,6 +1,6 @@
 {
-  "name": "Reading Stations Explorer",
-  "short_name": "Reading Stations",
+  "name": "CVGC Reading Stations Explorer",
+  "short_name": "CVGC Reading Stations",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#f6f5ef",

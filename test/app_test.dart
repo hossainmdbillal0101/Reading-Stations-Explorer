@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:reading_stations_explorer/src/app.dart';
 import 'package:reading_stations_explorer/src/store.dart';
+import 'helpers/fake_firebase.dart';
 
 void main() {
   testWidgets(
@@ -12,9 +13,10 @@ void main() {
     final store = ExplorerStore();
     await store.initialize();
     await tester.pumpWidget(ExplorerApp(store: store));
+    expect(find.text('Explore administration'), findsNothing);
     await tester.tap(find.text('Explore as a reader'));
     await tester.pumpAndSettle();
-    expect(find.text('Reading Stations'), findsOneWidget);
+    expect(find.text('CVGC Reading Stations'), findsOneWidget);
     await tester.enterText(find.byType(TextField).first, 'Sherlock');
     await tester.pumpAndSettle();
     expect(find.text('The Adventures of Sherlock Holmes'), findsOneWidget);
@@ -32,9 +34,9 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    final store = ExplorerStore();
+    final store = ExplorerStore(api: FakeFirebase(adminRole: true, userId: 'owner-1'));
     await store.initialize();
-    store.enterDemo(asAdmin: true);
+    await store.authenticate('owner@example.invalid', 'fake-test-password', 'Owner');
     await tester.pumpWidget(ExplorerApp(store: store));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Manage'));
@@ -45,7 +47,23 @@ void main() {
     store.signOut();
     tester.view.physicalSize = const Size(390, 844);
     await tester.pumpAndSettle();
-    expect(find.text('Explore as a reader'), findsOneWidget);
+    expect(find.text('Sign in'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('public profile exposes no administrator or role switch controls', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final store = ExplorerStore();
+    await store.initialize();
+    store.enterDemo();
+    await tester.pumpWidget(ExplorerApp(store: store));
+    await tester.pumpAndSettle();
+    expect(find.text('Manage'), findsNothing);
+    await tester.tap(find.text('Profile'));
+    await tester.pumpAndSettle();
+    expect(find.text('Switch to demo administrator'), findsNothing);
+    expect(find.text('Administrator'), findsNothing);
+    expect(find.text('Reader'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

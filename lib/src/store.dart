@@ -7,8 +7,9 @@ import 'models.dart';
 class ExplorerStore extends ChangeNotifier {
   final FirebaseApi api;
   ExplorerStore({FirebaseApi? api}) : api = api ?? FirebaseApi();
-  bool get live => FirebaseApi.enabled;
-  bool signedIn = false, admin = false, busy = false;
+  bool get live => api.configured;
+  bool get admin => signedIn && live && api.admin;
+  bool signedIn = false, busy = false;
   String name = 'Demo reader', email = '', uid = 'demo-reader';
   String? error;
   List<Station> stations = [];
@@ -91,11 +92,10 @@ class ExplorerStore extends ChangeNotifier {
     }
   }
 
-  void enterDemo({bool asAdmin = false}) {
+  void enterDemo() {
     if (live) return;
     signedIn = true;
-    admin = asAdmin;
-    name = asAdmin ? 'Demo administrator' : 'Demo reader';
+    name = 'Demo reader';
     uid = 'demo-reader';
     email = '';
     error = null;
@@ -107,7 +107,6 @@ class ExplorerStore extends ChangeNotifier {
       run(() async {
         await api.authenticate(mail, password, register: register);
         uid = api.uid!;
-        admin = api.admin;
         email = api.email ?? mail;
         final profile = await api.profile();
         name = profile?['name'] as String? ??
@@ -140,7 +139,6 @@ class ExplorerStore extends ChangeNotifier {
   void signOut() {
     api.signOut();
     signedIn = false;
-    admin = false;
     error = null;
     if (live) {
       books = [];

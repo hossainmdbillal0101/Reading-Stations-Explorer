@@ -1,6 +1,6 @@
 # Architecture and thesis mapping
 
-The thesis sequence is preserved as a product journey: create/access an account → discover a material → find its station → save it → submit requests or missing-material reports → administer the collection.
+The thesis sequence is preserved as a product journey: create/access an account â†’ discover a material â†’ find its station â†’ save it â†’ submit requests or missing-material reports â†’ administer the collection.
 
 The rebuild uses one Flutter UI for web and Android. Layout changes at 900 logical pixels: desktop uses a navigation rail, while narrower layouts use bottom navigation. Book cards change column count with available space.
 
@@ -44,4 +44,4 @@ The original app used different field names such as `bookName`, `stationID`, `me
 
 No material is written merely because it was read. Catalogue IDs come from document paths. Station deletion is blocked in the application when its loaded catalogue contains books. Firestore rules cannot enforce a collection-wide referential constraint; concurrent administrators must coordinate station deletion, or add a transactional trusted backend before a larger deployment.
 
-The portfolio demo is a single fictional workspace. Demo role switching shares that local workspace and is not an authentication boundary. Live favourites are stored on the user's profile. Multiple concurrent sessions use last-write-wins profile updates; collaborative conflict handling is a future enhancement.
+The portfolio demo is a single fictional workspace. The public demo has no administrator role switch; catalogue mutations require an authenticated live administrator. Live favourites are stored on the user's profile. Multiple concurrent sessions use last-write-wins profile updates; collaborative conflict handling is a future enhancement.

@@ -6,6 +6,8 @@ class FirebaseApi {
   static const apiKey = String.fromEnvironment('FIREBASE_API_KEY');
   static const projectId = String.fromEnvironment('FIREBASE_PROJECT_ID');
   static const enabled = apiKey != '' && projectId != '';
+  bool get configured => enabled;
+
   String? _token, _refreshToken;
   DateTime _expires = DateTime(2000);
   String? uid;

@@ -2,7 +2,7 @@
 
 Never commit access tokens, passwords, service-account JSON, private keys, keystores, signing passwords, `.env` files, real student data, or local Firebase configuration. Keep the original report private unless you prepare and check a redacted public copy.
 
-The default Pages build uses sample data only. Demo administrator switching is intentionally available and never grants access to Firebase. In Firebase mode, authorization is enforced by Firestore rules against a signed Firebase custom claim; decoding a token in the UI is not treated as authorization by itself.
+The default Pages build uses sample data only. Public demo visitors cannot switch to administrator or change the catalogue. Administrator controls require a configured live backend, authentication, and a signed administrator claim. In Firebase mode, authorization is enforced by Firestore rules against a signed Firebase custom claim; decoding a token in the UI is not treated as authorization by itself.
 
 Firebase **client** configuration is ultimately readable inside a compiled client. An ignored JSON file prevents accidental repository publication; it cannot make client configuration secret after deployment. The public portfolio demo contains no Firebase configuration. Service-account keys and administrator tokens must never enter any client build.
 
