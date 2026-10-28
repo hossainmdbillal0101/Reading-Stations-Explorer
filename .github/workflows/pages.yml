@@ -1,0 +1,39 @@
+name: Deploy demo to Pages
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.4'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter test
+      - name: Build sample demo with repository base path
+        shell: bash
+        run: |
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          BASE_PATH="/$REPO_NAME/"
+          if [[ "$REPO_NAME" == *.github.io ]]; then BASE_PATH="/"; fi
+          flutter build web --release --base-href "$BASE_PATH"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

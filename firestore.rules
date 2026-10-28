@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function admin() { return signedIn() && request.auth.token.admin == true; }
+    function shortText(v) { return v is string && v.size() > 0 && v.size() <= 300; }
+    function validBook() {
+      let d = request.resource.data;
+      return d.keys().hasAll(['title', 'author', 'category', 'stationId', 'description', 'url', 'available'])
+        && d.keys().hasOnly(['title', 'author', 'category', 'stationId', 'description', 'url', 'available'])
+        && shortText(d.title) && shortText(d.author) && shortText(d.category) && shortText(d.stationId)
+        && d.description is string && d.description.size() > 0 && d.description.size() <= 2000
+        && d.url is string && d.url.size() <= 300 && (d.url == '' || d.url.matches('https://.*'))
+        && d.available is bool
+        && exists(/databases/$(database)/documents/stations/$(d.stationId));
+    }
+    match /books/{id} {
+      allow read: if signedIn();
+      allow create, update: if admin() && validBook();
+      allow delete: if admin();
+    }
+    match /stations/{id} {
+      allow read: if signedIn();
+      allow create, update: if admin()
+        && request.resource.data.keys().hasAll(['name', 'location'])
+        && request.resource.data.keys().hasOnly(['name', 'location'])
+        && shortText(request.resource.data.name) && shortText(request.resource.data.location);
+      allow delete: if admin();
+    }
+    match /users/{uid} {
+      allow get: if signedIn() && request.auth.uid == uid;
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasAll(['name', 'email', 'favourites'])
+        && request.resource.data.keys().hasOnly(['name', 'email', 'favourites'])
+        && shortText(request.resource.data.name)
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.favourites is list
+        && request.resource.data.favourites.size() <= 500;
+      allow delete: if signedIn() && request.auth.uid == uid;
+    }
+    match /requests/{id} {
+      allow read: if signedIn() && (admin() || resource.data.userId == request.auth.uid);
+      allow create: if signedIn()
+        && request.resource.data.keys().hasAll(['userId', 'title', 'author', 'type', 'status'])
+        && request.resource.data.keys().hasOnly(['userId', 'title', 'author', 'type', 'status'])
+        && request.resource.data.userId == request.auth.uid
+        && shortText(request.resource.data.title) && shortText(request.resource.data.author)
+        && request.resource.data.type in ['missing', 'suggestion']
+        && request.resource.data.status == 'pending';
+      allow update: if admin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+        && request.resource.data.status in ['pending', 'resolved', 'declined'];
+      allow delete: if admin();
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
