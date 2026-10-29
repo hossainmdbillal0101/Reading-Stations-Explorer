@@ -35,13 +35,11 @@ The public demo needs no Firebase project. These steps are for a real shared cat
 
 ## Security rules validation
 
-The package includes emulator tests in `backend-tests/`. They test unauthenticated denial, administrator-only writes, profile ownership, request ownership, and prevention of role escalation. Install Node.js and Java, then:
+The package includes emulator tests in `backend-tests/`. They test unauthenticated denial, administrator-only writes, profile ownership, request ownership, and prevention of role escalation. Use Node.js 24.12 or newer and Java 21 for the current emulator toolchain, then:
 
 ```sh
-cd backend-tests
-npm install
-cd ..
-firebase emulators:exec --only firestore --project demo-reading-stations "node --test backend-tests/rules.test.cjs"
+npm ci --ignore-scripts --prefix backend-tests
+npx --yes firebase-tools@15.34.1 emulators:exec --only firestore --project demo-reading-stations "node --test backend-tests/rules.test.cjs"
 ```
 
 The `demo-` project ID is for local emulator tests. No credentials are required. See VALIDATION for whether these tests were actually run in the preparation environment.
