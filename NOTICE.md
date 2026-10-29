@@ -2,7 +2,7 @@
 
 This rebuild is based on the user-provided Reading Stations Explorer Flutter project and bachelor thesis. The original report concerns reading-material discovery for Comilla Victoria Government College, completed as undergraduate work at Universiti Tun Hussein Onn Malaysia.
 
-`archive/original-flutter/lib` preserves original Dart implementation files for comparison. Firebase configuration is excluded. The archive is historical reference, excluded from analysis, and is not a second supported application. Its original dependency manifests document its environment; do not run it against the original backend.
+`archive/original-flutter/lib` preserves original Dart implementation files for comparison. Firebase configuration is excluded. The archive is historical reference, excluded from analysis, and is not a second supported application. Its obsolete dependency manifests are retained privately rather than distributed as runnable build inputs. Do not run it against the original backend.
 
 Original report PDFs, declarations, signatures, addresses, student identifiers, survey material, presentation, and video are not distributed. The supplied report includes institutional ownership language; confirm permissions before distributing the report or adopting a license for academic source material. No legal conclusion about ownership is made here.
 
